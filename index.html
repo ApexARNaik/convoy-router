@@ -58,22 +58,18 @@
       
       .card--border-glow {
         position: relative;
-        /* Ensure background color class is explicitly applied in JSX */
       }
       
-      /* Glow effect overlay: This creates the radial glow around the card on hover */
       .card--border-glow::after {
         content: '';
         position: absolute;
         inset: 0;
-        padding: 2px; /* Inner padding for the glow to be outside the border */
+        padding: 2px;
         background: radial-gradient(var(--glow-radius, 200px) circle at var(--glow-x, 50%) var(--glow-y, 50%),
-            /* Use glow-color variable from component, defaults to military-red RGB */
             rgba(var(--glow-color, 239, 68, 68), calc(var(--glow-intensity, 0) * 0.8)) 0%,
             rgba(var(--glow-color, 239, 68, 68), calc(var(--glow-intensity, 0) * 0.4)) 30%,
             transparent 60%);
         border-radius: inherit;
-        /* This masking technique is what makes the glow appear only around the edges */
         mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
         mask-composite: subtract;
         -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -84,12 +80,10 @@
         opacity: 0;
       }
       
-      /* Show border glow overlay on hover */
       .card--border-glow:hover::after {
           opacity: 1;
       }
       
-      /* Small particles within the card when star effect is active */
       .particle::before {
         content: '';
         position: absolute;
@@ -97,28 +91,15 @@
         left: -2px;
         right: -2px;
         bottom: -2px;
-        /* Use a slightly transparent version of the glow color */
         background: rgba(var(--glow-color, 239, 68, 68), 0.2); 
         border-radius: 50%;
         z-index: -1;
       }
       /* --- END: Magic Bento CSS for Animations --- */
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "framer-motion": "https://aistudiocdn.com/framer-motion@^12.23.24",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "recharts": "https://aistudiocdn.com/recharts@^3.5.0"
-  }
-}
-</script>
 </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
