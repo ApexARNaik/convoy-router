@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { RouteAnalysis, Convoy, ConvoyStatus } from '../types';
 import { analyzeRouteWithAI } from '../services/geminiService';
-import { Loader2, ShieldCheck, AlertTriangle, Map, ArrowRight, PlayCircle } from 'lucide-react';
+import { Loader2, AlertTriangle, Map, ArrowRight, PlayCircle, ShieldCheck } from 'lucide-react';
+import { BentoCard } from './Bento/BentoCard'; // <-- NEW IMPORT
 
 interface RoutePlannerProps {
   onAddConvoy: (convoy: Convoy) => void;
@@ -37,15 +38,19 @@ const RoutePlanner: React.FC<RoutePlannerProps> = ({ onAddConvoy }) => {
       vehicleCount: vehicleCount,
       priority: analysis.riskLevel === 'HIGH' ? 'HIGH' : 'MEDIUM',
       eta: analysis.estimatedDuration,
-      distance: 'Calculating...' // In a real app this would come from the AI or Maps API
+      distance: 'Calculating...' 
     };
 
     onAddConvoy(newConvoy);
   };
 
   return (
-    <div className="h-full flex flex-col gap-6">
-      <div className="bg-military-800 p-6 rounded-lg border border-military-700 shadow-lg">
+    <div className="h-full flex flex-col gap-6 max-w-6xl mx-auto">
+      {/* Input / Form Card */}
+      <BentoCard 
+        className="p-6 bg-military-800 rounded-xl border border-military-700 shadow-lg"
+        enableTilt={true}
+      >
         <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2 font-mono">
           <Map className="w-5 h-5 text-military-red" />
           ROUTE OPTIMIZATION REQUEST
@@ -90,10 +95,15 @@ const RoutePlanner: React.FC<RoutePlannerProps> = ({ onAddConvoy }) => {
             </button>
           </div>
         </form>
-      </div>
+      </BentoCard>
 
+      {/* Analysis Result Card */}
       {analysis && (
-        <div className="flex-1 bg-military-800 p-6 rounded-lg border border-military-700 animate-in fade-in slide-in-from-bottom-4 flex flex-col">
+        <BentoCard 
+          className="flex-1 p-6 bg-military-800 rounded-xl border border-military-700 animate-in fade-in slide-in-from-bottom-4 flex flex-col"
+          enableTilt={true}
+          glowColor='16, 185, 129' // Override glow to be emerald/green for successful deploy tone
+        >
           <div className="flex justify-between items-start mb-6 border-b border-military-700 pb-4">
              <div>
                <h3 className="text-lg font-bold text-white font-mono">ANALYSIS RESULT: {analysis.routeId}</h3>
@@ -165,7 +175,7 @@ const RoutePlanner: React.FC<RoutePlannerProps> = ({ onAddConvoy }) => {
               </ul>
             </div>
           </div>
-        </div>
+        </BentoCard>
       )}
     </div>
   );

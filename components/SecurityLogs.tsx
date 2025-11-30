@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { Shield, AlertTriangle, CheckCircle, Lock, Terminal } from 'lucide-react';
+import { BentoCard, BentoGrid } from './Bento/BentoCard'; // <-- NEW IMPORT
 
 const SecurityLogs: React.FC = () => {
   const logs = [
@@ -13,8 +13,14 @@ const SecurityLogs: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
-      <div className="bg-military-800 p-6 rounded-lg border border-military-700 flex justify-between items-center">
+    <div className="max-w-7xl mx-auto space-y-6">
+      
+      {/* Header/Status Card */}
+      <BentoCard 
+        className="bg-military-800 p-6 rounded-xl border border-military-700 flex justify-between items-center"
+        enableTilt={false}
+        enableStars={false}
+      >
         <div>
            <h2 className="text-2xl font-bold text-white font-mono flex items-center gap-3">
              <Shield className="w-8 h-8 text-military-red" />
@@ -28,16 +34,21 @@ const SecurityLogs: React.FC = () => {
            </div>
            <p className="text-gray-500 text-xs font-mono">LAST SCAN: 00:02:15 AGO</p>
         </div>
-      </div>
+      </BentoCard>
 
-      <div className="bg-military-900 border border-military-700 rounded-lg overflow-hidden">
+      {/* Main Logs Table Card */}
+      <BentoCard 
+        className="bg-military-900 border border-military-700 rounded-xl overflow-hidden p-0"
+        enableTilt={true}
+        enableMagnetism={false}
+      >
         <div className="p-3 bg-black border-b border-military-700 flex items-center gap-2 text-xs font-mono text-gray-500">
           <Terminal className="w-4 h-4" />
           <span>/var/log/sys_audit.log</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm font-mono">
-            <thead className="bg-military-800 text-gray-400 uppercase text-xs">
+            <thead className="bg-military-800 text-gray-400 uppercase text-xs sticky top-0">
               <tr>
                 <th className="p-4">Timestamp</th>
                 <th className="p-4">Event ID</th>
@@ -70,11 +81,15 @@ const SecurityLogs: React.FC = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      </BentoCard>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-military-800 p-5 rounded border border-military-700">
-           <h3 className="text-white text-sm font-bold uppercase mb-4 flex items-center gap-2">
+      {/* Detail Metrics Grid */}
+      <BentoGrid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <BentoCard 
+          className="col-span-1 bg-military-800 p-5 rounded-xl border border-military-700"
+          enableTilt={true}
+        >
+           <h3 className="text-white text-sm font-bold uppercase mb-4 flex items-center gap-2 border-b border-military-700 pb-2">
              <Lock className="w-4 h-4 text-military-red" /> Encryption Status
            </h3>
            <div className="space-y-4">
@@ -91,10 +106,13 @@ const SecurityLogs: React.FC = () => {
                <span className="text-emerald-500">VERIFIED</span>
              </div>
            </div>
-        </div>
+        </BentoCard>
 
-        <div className="bg-military-800 p-5 rounded border border-military-700">
-           <h3 className="text-white text-sm font-bold uppercase mb-4 flex items-center gap-2">
+        <BentoCard 
+          className="col-span-1 md:col-span-2 bg-military-800 p-5 rounded-xl border border-military-700"
+          enableTilt={true}
+        >
+           <h3 className="text-white text-sm font-bold uppercase mb-4 flex items-center gap-2 border-b border-military-700 pb-2">
              <AlertTriangle className="w-4 h-4 text-amber-500" /> Intrusion Detection
            </h3>
            <div className="flex items-center justify-center h-24">
@@ -103,8 +121,8 @@ const SecurityLogs: React.FC = () => {
                  <p className="text-xs text-gray-500 uppercase mt-1">Active Threats</p>
               </div>
            </div>
-        </div>
-      </div>
+        </BentoCard>
+      </BentoGrid>
     </div>
   );
 };

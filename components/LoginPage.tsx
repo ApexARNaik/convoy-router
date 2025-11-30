@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import { User, UserRole } from '../types';
 import { Shield, Lock, Scan, UserCheck } from 'lucide-react';
+import { BentoCard } from './Bento/BentoCard'; // <-- NEW IMPORT
 
 interface LoginPageProps {
   onLogin: (user: User) => void;
@@ -28,10 +28,15 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
   return (
     <div className="h-screen w-full bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-military-900 border border-military-700 rounded-lg shadow-2xl overflow-hidden relative">
+      <BentoCard 
+        className="w-full max-w-md bg-military-900 border border-military-700 rounded-xl shadow-2xl overflow-hidden relative"
+        enableTilt={true}
+        enableMagnetism={true}
+        enableStars={true}
+      >
         {/* Header */}
         <div className="bg-military-800 p-6 border-b border-military-700 text-center">
-          <div className="mx-auto w-12 h-12 bg-military-900 rounded-full flex items-center justify-center border border-military-700 mb-3">
+          <div className="mx-auto w-12 h-12 bg-military-900 rounded-full flex items-center justify-center border border-military-700 mb-3 shadow-inner shadow-military-red/50">
              <Lock className="w-6 h-6 text-military-red" />
           </div>
           <h2 className="text-xl font-bold text-white font-mono tracking-wider">SECURITY CLEARANCE</h2>
@@ -46,7 +51,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               type="text" 
               value={id}
               onChange={(e) => setId(e.target.value)}
-              className="w-full bg-black border border-military-700 text-white p-3 rounded focus:border-military-red focus:outline-none font-mono tracking-widest"
+              className="w-full bg-black border border-military-700 text-white p-3 rounded-lg focus:border-military-red focus:ring-1 focus:ring-military-red focus:outline-none font-mono tracking-widest"
             />
           </div>
 
@@ -58,10 +63,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                   key={r}
                   type="button"
                   onClick={() => setRole(r)}
-                  className={`p-3 border rounded text-xs font-mono font-bold text-left transition-all flex items-center gap-3 ${
+                  className={`p-3 border rounded-lg text-xs font-mono font-bold text-left transition-all flex items-center gap-3 ${
                     role === r 
-                      ? 'bg-military-red text-white border-military-red' 
-                      : 'bg-transparent border-military-700 text-gray-400 hover:border-gray-500'
+                      ? 'bg-military-red text-white border-military-red shadow-lg shadow-military-red/20' 
+                      : 'bg-transparent border-military-700 text-gray-400 hover:border-gray-500 hover:bg-military-800/50'
                   }`}
                 >
                   <UserCheck className="w-4 h-4" />
@@ -74,7 +79,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full bg-white text-black font-bold py-4 rounded hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 font-mono uppercase tracking-widest mt-4"
+            className="w-full bg-emerald-600 text-white font-bold py-4 rounded-lg hover:bg-emerald-500 transition-colors flex items-center justify-center gap-2 font-mono uppercase tracking-widest mt-4 shadow-lg shadow-emerald-600/30 disabled:opacity-50"
           >
             {loading ? (
               <>
@@ -92,7 +97,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
              UNAUTHORIZED ACCESS IS A PUNISHABLE OFFENSE UNDER MILITARY ACT 404
            </p>
         </div>
-      </div>
+      </BentoCard>
     </div>
   );
 };

@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
-import { Settings, Save, RefreshCw, Database, Wifi, Bell, Shield, Radio } from 'lucide-react';
+import { Settings, Save, RefreshCw, Database, Wifi, Shield } from 'lucide-react';
+import { BentoCard, BentoGrid } from './Bento/BentoCard'; // <-- NEW IMPORT
 
 const SystemConfig: React.FC = () => {
   const [settings, setSettings] = useState({
@@ -16,7 +16,9 @@ const SystemConfig: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto space-y-6">
+      
+      {/* Header */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-white font-mono flex items-center gap-3">
           <Settings className="w-8 h-8 text-military-red" />
@@ -26,13 +28,18 @@ const SystemConfig: React.FC = () => {
       </div>
 
       <div className="space-y-6">
-        {/* Network Section */}
-        <section className="bg-military-800 rounded border border-military-700 overflow-hidden">
+        
+        {/* Network Section Card */}
+        <BentoCard 
+           className="bg-military-800 rounded-xl border border-military-700 overflow-hidden p-0"
+           enableTilt={true}
+        >
            <div className="p-4 bg-military-900/50 border-b border-military-700 flex items-center gap-2">
              <Wifi className="w-4 h-4 text-emerald-500" />
              <h3 className="text-white font-bold text-sm uppercase font-mono">Network & Connectivity</h3>
            </div>
            <div className="p-6 space-y-6">
+             {/* Satellite Sync */}
              <div className="flex items-center justify-between">
                 <div>
                    <p className="text-white font-bold text-sm font-mono">Satellite Uplink Sync</p>
@@ -46,6 +53,7 @@ const SystemConfig: React.FC = () => {
                 </button>
              </div>
              
+             {/* Low Bandwidth Mode */}
              <div className="flex items-center justify-between">
                 <div>
                    <p className="text-white font-bold text-sm font-mono">Low Bandwidth Mode</p>
@@ -59,10 +67,13 @@ const SystemConfig: React.FC = () => {
                 </button>
              </div>
            </div>
-        </section>
+        </BentoCard>
 
-        {/* Security Section */}
-        <section className="bg-military-800 rounded border border-military-700 overflow-hidden">
+        {/* Security Section Card */}
+        <BentoCard 
+          className="bg-military-800 rounded-xl border border-military-700 overflow-hidden p-0"
+          enableTilt={true}
+        >
            <div className="p-4 bg-military-900/50 border-b border-military-700 flex items-center gap-2">
              <Shield className="w-4 h-4 text-military-red" />
              <h3 className="text-white font-bold text-sm uppercase font-mono">Security Protocols</h3>
@@ -90,15 +101,19 @@ const SystemConfig: React.FC = () => {
                 </div>
              </div>
            </div>
-        </section>
+        </BentoCard>
 
-        {/* System Section */}
-        <section className="bg-military-800 rounded border border-military-700 overflow-hidden">
+        {/* System Preferences Card */}
+        <BentoCard 
+          className="bg-military-800 rounded-xl border border-military-700 overflow-hidden p-0"
+          enableTilt={true}
+        >
            <div className="p-4 bg-military-900/50 border-b border-military-700 flex items-center gap-2">
              <Database className="w-4 h-4 text-blue-500" />
              <h3 className="text-white font-bold text-sm uppercase font-mono">System Preferences</h3>
            </div>
            <div className="p-6 space-y-6">
+             {/* Auto-Refresh Dashboard */}
              <div className="flex items-center justify-between">
                 <div>
                    <p className="text-white font-bold text-sm font-mono">Auto-Refresh Dashboard</p>
@@ -112,6 +127,7 @@ const SystemConfig: React.FC = () => {
                 </button>
              </div>
 
+             {/* Push Notifications */}
              <div className="flex items-center justify-between">
                 <div>
                    <p className="text-white font-bold text-sm font-mono">Push Notifications</p>
@@ -125,13 +141,13 @@ const SystemConfig: React.FC = () => {
                 </button>
              </div>
            </div>
-        </section>
+        </BentoCard>
 
-        <div className="flex justify-end gap-4 pt-4">
-           <button className="px-6 py-2 bg-transparent text-gray-400 border border-military-700 rounded hover:text-white font-mono text-sm flex items-center gap-2">
+        <div className="flex justify-end gap-4 pt-4 md:col-span-full">
+           <button className="px-6 py-2 bg-transparent text-gray-400 border border-military-700 rounded-xl hover:text-white font-mono text-sm flex items-center gap-2 hover:bg-military-700/50 transition-colors">
              <RefreshCw className="w-4 h-4" /> RESET DEFAULTS
            </button>
-           <button className="px-6 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-500 font-mono text-sm font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+           <button className="px-6 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-500 font-mono text-sm font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-colors">
              <Save className="w-4 h-4" /> SAVE CHANGES
            </button>
         </div>

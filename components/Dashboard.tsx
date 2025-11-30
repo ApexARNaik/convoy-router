@@ -2,6 +2,7 @@ import React from 'react';
 import { MOCK_ALERTS } from '../constants';
 import { ConvoyStatus, Convoy } from '../types';
 import TacticalMap from './TacticalMap';
+import { BentoCard, BentoGrid } from './Bento/BentoCard'; // <-- NEW IMPORT
 import { Activity, AlertTriangle, Truck, Zap, Radio } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -20,64 +21,98 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ convoys }) => {
+  const activeUnits = convoys.filter(c => c.status === ConvoyStatus.MOVING).length;
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full overflow-hidden">
-      
-      {/* Left Column: Metrics & Alerts */}
-      <div className="flex flex-col gap-6 lg:col-span-1 h-full overflow-y-auto pr-2">
-        {/* Key Metrics */}
-        <div className="grid grid-cols-2 gap-4">
-           <div className="bg-military-800 p-4 rounded border border-military-700 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Truck className="w-12 h-12 text-blue-500" />
-              </div>
-              <h3 className="text-gray-400 text-xs font-bold uppercase tracking-widest font-mono">Active Units</h3>
-              <p className="text-3xl text-white font-bold mt-1 font-mono">{convoys.filter(c => c.status === ConvoyStatus.MOVING).length}</p>
-              <p className="text-xs text-emerald-500 mt-2 font-mono flex items-center gap-1">
-                 <Activity className="w-3 h-3" /> +2 En Route
-              </p>
-           </div>
-           <div className="bg-military-800 p-4 rounded border border-military-700 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Zap className="w-12 h-12 text-military-red" />
-              </div>
-              <h3 className="text-gray-400 text-xs font-bold uppercase tracking-widest font-mono">Threat Level</h3>
-              <p className="text-3xl text-military-red font-bold mt-1 font-mono">MODERATE</p>
-              <p className="text-xs text-military-red/70 mt-2 font-mono">Sector 4 Congestion</p>
-           </div>
-        </div>
-
-        {/* Live Alerts */}
-        <div className="bg-military-800 rounded border border-military-700 flex-1 flex flex-col min-h-[300px]">
-           <div className="p-4 border-b border-military-700 flex justify-between items-center bg-military-900/50">
-              <h3 className="text-white font-bold text-sm uppercase tracking-wider font-mono flex items-center gap-2">
-                 <AlertTriangle className="w-4 h-4 text-amber-500" />
-                 Intel Feed
-              </h3>
-              <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-           </div>
-           <div className="flex-1 overflow-y-auto p-4 space-y-3">
-              {MOCK_ALERTS.map(alert => (
-                <div key={alert.id} className="p-3 bg-military-900/80 border-l-2 border-military-red rounded-r text-sm">
-                   <div className="flex justify-between items-start mb-1">
-                      <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${
-                        alert.severity === 'CRITICAL' ? 'bg-red-500 text-black' : 
-                        alert.severity === 'WARNING' ? 'bg-amber-500 text-black' : 
-                        'bg-blue-500 text-black'
-                      }`}>{alert.severity}</span>
-                      <span className="text-gray-500 text-xs font-mono">{alert.timestamp}</span>
-                   </div>
-                   <p className="text-gray-300 font-mono text-xs leading-relaxed">{alert.message}</p>
-                   {alert.location && <p className="text-military-red/70 text-xs font-mono mt-1">LOC: {alert.location}</p>}
+    <div className="h-full overflow-y-auto">
+      {/* Set the grid to be responsive: 4 columns on large screens */}
+      <BentoGrid className="lg:grid-cols-4 max-w-7xl mx-auto">
+        
+        {/* Card 1: Key Metrics - Span 1 column on large screens */}
+        <BentoCard 
+          className="col-span-4 md:col-span-2 lg:col-span-1 p-4 bg-military-800 border border-military-700 rounded-xl"
+          enableTilt={true}
+          enableMagnetism={true}
+        >
+          <div className="flex flex-col h-full">
+            <h3 className="text-white font-bold text-lg uppercase tracking-wider font-mono mb-4 border-b border-military-700 pb-2">
+                Command Metrics
+            </h3>
+            <div className="grid grid-cols-2 gap-4 flex-1">
+              {/* Active Units */}
+              <div className="bg-military-900/80 p-3 rounded border border-military-700 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-2 opacity-30">
+                  <Truck className="w-8 h-8 text-blue-500" />
                 </div>
-              ))}
-           </div>
-        </div>
+                <h4 className="text-gray-400 text-xs font-bold uppercase tracking-widest font-mono">Active Units</h4>
+                <p className="text-2xl text-white font-bold mt-1 font-mono">{activeUnits}</p>
+                <p className="text-xs text-emerald-500 mt-2 font-mono flex items-center gap-1">
+                    <Activity className="w-3 h-3" /> +2 En Route
+                </p>
+              </div>
+              {/* Threat Level */}
+              <div className="bg-military-900/80 p-3 rounded border border-military-700 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-2 opacity-30">
+                  <Zap className="w-8 h-8 text-military-red" />
+                </div>
+                <h4 className="text-gray-400 text-xs font-bold uppercase tracking-widest font-mono">Threat Level</h4>
+                <p className="text-2xl text-military-red font-bold mt-1 font-mono">MODERATE</p>
+                <p className="text-xs text-military-red/70 mt-2 font-mono">Sector 4 Congestion</p>
+              </div>
+            </div>
+            <div className="mt-4 text-xs text-gray-600 font-mono">
+                <span className="text-emerald-500">SYSTEM HEALTH: 99%</span>
+            </div>
+          </div>
+        </BentoCard>
 
-        {/* Efficiency Chart */}
-        <div className="bg-military-800 p-4 rounded border border-military-700 h-64 flex flex-col">
+        {/* Card 2: Tactical Map - Span 3 columns, 2 rows for a huge main map */}
+        <BentoCard 
+          className="col-span-4 lg:col-span-3 row-span-2 p-0 bg-military-900 border border-military-700 rounded-xl overflow-hidden shadow-2xl"
+          enableTilt={false}
+          enableMagnetism={false}
+          enableStars={false}
+        >
+          <TacticalMap />
+        </BentoCard>
+
+        {/* Card 3: Live Alerts - Span 1 column, 2 rows on large screen */}
+        <BentoCard 
+          className="col-span-4 md:col-span-2 lg:col-span-1 row-span-2 p-0 bg-military-800 border border-military-700 rounded-xl flex flex-col overflow-hidden"
+          enableTilt={true}
+        >
+          <div className="p-4 border-b border-military-700 flex justify-between items-center bg-military-900/50 shrink-0">
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider font-mono flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-500" />
+                Intel Feed
+            </h3>
+            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {MOCK_ALERTS.map(alert => (
+              <div key={alert.id} className="p-3 bg-military-900/80 border-l-2 border-military-red rounded-r text-sm">
+                <div className="flex justify-between items-start mb-1">
+                  <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${
+                    alert.severity === 'CRITICAL' ? 'bg-red-500 text-black' : 
+                    alert.severity === 'WARNING' ? 'bg-amber-500 text-black' : 
+                    'bg-blue-500 text-black'
+                  }`}>{alert.severity}</span>
+                  <span className="text-gray-500 text-xs font-mono">{alert.timestamp}</span>
+                </div>
+                <p className="text-gray-300 font-mono text-xs leading-relaxed">{alert.message}</p>
+                {alert.location && <p className="text-military-red/70 text-xs font-mono mt-1">LOC: {alert.location}</p>}
+              </div>
+            ))}
+          </div>
+        </BentoCard>
+
+        {/* Card 4: Efficiency Chart - Span 1 column on large screen */}
+        <BentoCard 
+          className="col-span-4 md:col-span-2 lg:col-span-1 p-4 bg-military-800 border border-military-700 rounded-xl flex flex-col h-full"
+          enableTilt={true}
+        >
           <h3 className="text-gray-400 text-xs font-bold uppercase tracking-widest font-mono mb-4">Traffic vs Velocity</h3>
-          <div className="flex-1">
+          <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data}>
                 <defs>
@@ -101,19 +136,14 @@ const Dashboard: React.FC<DashboardProps> = ({ convoys }) => {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </div>
-      </div>
-
-      {/* Center & Right Column: Map & Active Convoys */}
-      <div className="lg:col-span-2 flex flex-col gap-6 h-full">
-        {/* Map Area */}
-        <div className="flex-1 min-h-[400px] relative rounded-lg overflow-hidden border border-military-700 shadow-2xl">
-          <TacticalMap />
-        </div>
-
-        {/* Convoy Status Table */}
-        <div className="h-64 bg-military-800 rounded border border-military-700 overflow-hidden flex flex-col">
-          <div className="p-3 bg-military-900 border-b border-military-700 flex items-center justify-between">
+        </BentoCard>
+        
+        {/* Card 5: Convoy Status Table - Span 3 columns on large screens */}
+        <BentoCard 
+          className="col-span-4 lg:col-span-3 p-0 bg-military-800 border border-military-700 rounded-xl overflow-hidden flex flex-col"
+          enableTilt={true}
+        >
+          <div className="p-3 bg-military-900 border-b border-military-700 flex items-center justify-between shrink-0">
             <h3 className="text-white font-bold text-sm uppercase font-mono flex items-center gap-2">
                <Radio className="w-4 h-4 text-emerald-500" />
                Active Convoys Status
@@ -165,8 +195,9 @@ const Dashboard: React.FC<DashboardProps> = ({ convoys }) => {
               </tbody>
             </table>
           </div>
-        </div>
-      </div>
+        </BentoCard>
+
+      </BentoGrid>
     </div>
   );
 };
